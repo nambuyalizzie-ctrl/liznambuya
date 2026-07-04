@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liz Nambuya</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0F1318;
+    --ink-mid: #1E2530;
+    --cream: #F5F0E8;
+    --cream-dim: rgba(245,240,232,0.55);
+    --cream-faint: rgba(245,240,232,0.15);
+    --gold: #C9954A;
+    --gold-dim: rgba(201,149,74,0.15);
+    --teal: #3D8C82;
+    --teal-dim: rgba(61,140,130,0.12);
+    --border: rgba(245,240,232,0.1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  .ripple-canvas {
+    position: fixed;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .ripple-circle {
+    position: absolute;
+    top: 38%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    opacity: 0;
+  }
+
+  .r1 { width: 400px; height: 400px; animation: rOut 3s ease-out 0.2s forwards; }
+  .r2 { width: 700px; height: 700px; animation: rOut 3s ease-out 0.7s forwards; }
+  .r3 { width: 1050px; height: 1050px; animation: rOut 3s ease-out 1.2s forwards; }
+
+  @keyframes rOut {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0.5; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  nav {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+
+  .nav-links a {
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--cream); }
+
+  .hero {
+    padding: 5rem 0 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: end;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4rem);
+    line-height: 1.05;
+    color: var(--cream);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-tagline {
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    line-height: 1.75;
+    max-width: 320px;
+  }
+
+  .hero-right {
+    border-left: 1px solid var(--border);
+    padding-left: 2.5rem;
+  }
+
+  .hero-meta-row {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-meta-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .meta-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .meta-value {
+    font-size: 0.85rem;
+    color: var(--cream);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .meta-value span {
+    display: block;
+    color: var(--cream-dim);
+    font-size: 0.78rem;
+    font-weight: 300;
+  }
+
+  .section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--cream-faint);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .about-body p {
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    line-height: 1.9;
+    margin-bottom: 1.3rem;
+  }
+
+  .about-body p:last-child { margin-bottom: 0; }
+
+  .cred-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 2.5rem;
+  }
+
+  .cred-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--ink-mid);
+  }
+
+  .cred-item:last-child { border-bottom: none; }
+
+  .cred-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .cred-text { font-size: 0.85rem; color: var(--cream); flex: 1; }
+  .cred-inst { font-size: 0.75rem; color: var(--cream-dim); }
+
+  .exp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .exp-item {
+    background: var(--ink-mid);
+    padding: 1.5rem;
+  }
+
+  .exp-period {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+  }
+
+  .exp-role {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+  }
+
+  .exp-org {
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+    line-height: 1.5;
+  }
+
+  .ripple-card {
+    background: var(--teal-dim);
+    border: 1px solid rgba(61,140,130,0.25);
+    border-radius: 4px;
+    padding: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .ripple-card-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.75rem;
+  }
+
+  .ripple-card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .ripple-card-body {
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-link {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .card-link.teal {
+    color: var(--teal);
+    border-bottom: 1px solid rgba(61,140,130,0.3);
+  }
+
+  .card-link.teal:hover { border-color: var(--teal); }
+
+  .card-link.gold {
+    color: var(--gold);
+    border-bottom: 1px solid rgba(201,149,74,0.3);
+  }
+
+  .card-link.gold:hover { border-color: var(--gold); }
+
+  .platform-card {
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,149,74,0.2);
+    border-radius: 4px;
+    padding: 2.5rem;
+  }
+
+  .platform-card-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .platform-card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .platform-card-body {
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .quote-section {
+    padding: 3.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .quote {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+    color: var(--cream-dim);
+    line-height: 1.6;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .contact-item {
+    background: var(--ink-mid);
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: block;
+  }
+
+  .contact-item:hover { background: #252d3a; }
+
+  .contact-item-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .contact-item-value {
+    font-size: 0.9rem;
+    color: var(--cream);
+    font-weight: 400;
+  }
+
+  .contact-item-sub {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    margin-top: 0.2rem;
+  }
+
+  footer {
+    padding: 2.5rem 0 3.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-copy { font-size: 0.72rem; color: var(--cream-dim); letter-spacing: 0.04em; }
+
+  .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+
+  .footer-links a {
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--cream); }
+
+  @media (max-width: 600px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 2rem; }
+    .exp-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ripple-canvas">
+  <div class="ripple-circle r1"></div>
+  <div class="ripple-circle r2"></div>
+  <div class="ripple-circle r3"></div>
+</div>
+
+<div class="container">
+
+  <nav>
+    <span class="nav-name">Liz Nambuya</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Finance · Education · Thinking</p>
+      <h1 class="hero-name">Liz<br>Nambuya</h1>
+      <p class="hero-tagline">I work at the intersection of financial rigour and human complexity, and I find that most interesting things live there.</p>
+    </div>
+    <div class="hero-right">
+      <div class="hero-meta-row">
+        <p class="meta-label">Current Role</p>
+        <p class="meta-value">Commercial Analyst, Upstream Finance
+          <span>BP · Aberdeen, Scotland</span>
+        </p>
+      </div>
+      <div class="hero-meta-row">
+        <p class="meta-label">Chartered Status</p>
+        <p class="meta-value">ACMA CGMA
+          <span>Chartered Institute of Management Accountants</span>
+        </p>
+      </div>
+      <div class="hero-meta-row">
+        <p class="meta-label">Based in</p>
+        <p class="meta-value">Aberdeen, Scotland</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="about">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">About</span>
+    </div>
+    <div class="about-body">
+      <p>I'm a finance professional with a background spanning financial control, internal audit and commercial finance, roles that have taught me to ask not just what the numbers say, but what they mean and for whom. It's a question that sounds simple and rarely is, which is probably why it's the one I keep coming back to.</p>
+      <p>That habit of pulling on simple-looking questions extends well beyond finance. I'm drawn to history, systems, identity, the way people make decisions under pressure, and the quiet places where those things overlap with the work I do. Finance gives me a framework for thinking rigorously. Everything else gives me something worth thinking rigorously about.</p>
+      <p>Running alongside all of this is an instinct toward teaching, toward finding the clearest, most honest way into a complex idea without making it smaller in the process. I've taught formally and informally across different contexts and have found that the instinct doesn't change much across them. It shapes how I write, how I explain, and what I choose to explore.</p>
+    </div>
+    <div class="cred-list">
+      <div class="cred-item">
+        <div class="cred-dot"></div>
+        <span class="cred-text">ACMA CGMA — Fully Chartered</span>
+        <span class="cred-inst">Chartered Institute of Management Accountants</span>
+      </div>
+      <div class="cred-item">
+        <div class="cred-dot"></div>
+        <span class="cred-text">Drapers Award for Outstanding Academic Achievement</span>
+        <span class="cred-inst">Queen Mary University of London</span>
+      </div>
+      <div class="cred-item">
+        <div class="cred-dot"></div>
+        <span class="cred-text">MSc Accounting & Management</span>
+        <span class="cred-inst">Queen Mary University of London</span>
+      </div>
+      <div class="cred-item">
+        <div class="cred-dot"></div>
+        <span class="cred-text">BSc Economics & Finance</span>
+        <span class="cred-inst">Cardiff University</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="experience">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Experience</span>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-item">
+        <p class="exp-period">Sep 2025 — Present</p>
+        <p class="exp-role">Commercial Analyst</p>
+        <p class="exp-org">BP · Upstream Finance · Aberdeen</p>
+      </div>
+      <div class="exp-item">
+        <p class="exp-period">Sep 2024 — Sep 2025</p>
+        <p class="exp-role">Internal Auditor</p>
+        <p class="exp-org">BP · Internal Audit · Sunbury</p>
+      </div>
+      <div class="exp-item">
+        <p class="exp-period">Sep 2023 — Sep 2024</p>
+        <p class="exp-role">Accounting, Reporting & Control Coordinator</p>
+        <p class="exp-org">BP · Accounting, Reporting & Control · Sunbury</p>
+      </div>
+      <div class="exp-item">
+        <p class="exp-period">Sep 2020 — Present</p>
+        <p class="exp-role">Brand Strategist</p>
+        <p class="exp-org">Platform Presence · Neurobranding</p>
+      </div>
+      <div class="exp-item">
+        <p class="exp-period">May 2019 — Aug 2020</p>
+        <p class="exp-role">Programme Coordinator</p>
+        <p class="exp-org">Leadership Training · Kampala, Uganda</p>
+      </div>
+      <div class="exp-item">
+        <p class="exp-period">Jan 2018 — Jan 2019</p>
+        <p class="exp-role">English Language Teacher</p>
+        <p class="exp-org">Secondary School · Rural Uganda</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="work">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Current Work</span>
+    </div>
+
+    <div class="ripple-card">
+      <p class="ripple-card-label">Ripple Finance</p>
+      <h2 class="ripple-card-title">Financial literacy that travels further than you.</h2>
+      <p class="ripple-card-body">Too many people count themselves out of financial thinking before they have really begun. Ripple Finance is a vision for making financial thinking genuinely accessible, through stories, games, and formats that meet people where they are rather than where textbooks assume they should be. The lesson series is where the work begins publicly, an introduction to the kind of thinking Ripple Finance is being built to spread.</p>
+      <a href="#" class="card-link teal">Read the series</a>
+    </div>
+
+    <div class="platform-card">
+      <p class="platform-card-label">Platform Presence</p>
+      <h2 class="platform-card-title">How you think shapes everything you build.</h2>
+      <p class="platform-card-body">Platform Presence is a neurobranding consultancy working at the intersection of mind, identity, and professional presence. Drawing on research into how the brain shapes behaviour, it helps people think more clearly about who they are, what they are worth, and how they show up at work, online, and in the world.</p>
+      <a href="https://platformpresence.com" class="card-link gold">Visit Platform Presence</a>
+    </div>
+  </div>
+
+  <div class="quote-section">
+    <p class="quote">"Write, not because you have all the answers, but because you have questions."</p>
+  </div>
+
+  <div class="section" id="contact">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Contact</span>
+    </div>
+    <div class="contact-grid">
+      <a href="mailto:contact@liznambuya.com" class="contact-item">
+        <p class="contact-item-label">Email</p>
+        <p class="contact-item-value">contact@liznambuya.com</p>
+        <p class="contact-item-sub">For enquiries and collaborations</p>
+      </a>
+      <a href="https://linkedin.com" class="contact-item">
+        <p class="contact-item-label">LinkedIn</p>
+        <p class="contact-item-value">Liz Nambuya</p>
+        <p class="contact-item-sub">Connect professionally</p>
+      </a>
+      <a href="https://platformpresence.com" class="contact-item">
+        <p class="contact-item-label">Platform Presence</p>
+        <p class="contact-item-value">platformpresence.com</p>
+        <p class="contact-item-sub">Brand Strategist · Neurobranding</p>
+      </a>
+      <a href="#" class="contact-item">
+        <p class="contact-item-label">Ripple Finance</p>
+        <p class="contact-item-value">Coming soon</p>
+        <p class="contact-item-sub">Financial literacy series</p>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-copy">© 2026 Liz Nambuya</span>
+    <ul class="footer-links">
+      <li><a href="https://linkedin.com">LinkedIn</a></li>
+      <li><a href="https://platformpresence.com">Platform Presence</a></li>
+      <li><a href="mailto:contact@liznambuya.com">Contact</a></li>
+    </ul>
+  </footer>
+
+</div>
+</body>
+</html>
